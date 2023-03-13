@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'hero-1.css'  %}" />
+<header id="header" style="height: 100vh;">
+
+<!-- Hero 1 - HCF Bootstrap 5 Component -->
+<section class="px-5 py-6 hcf-bp-center hcf-bs-cover hcf-overlay" style="height: 100%; background-image: url('{% static 'hero-main.jpg' %}');">
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
+{% if acl_search %}
+{% if acl_ok %}
+<div class="alert alert-success" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong> bestätigt!!</div>
+{% else %}
+<div class="alert alert-danger" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong>  nicht gefunden!</div>
+{% endif %}
+{% endif %}
+        <h1 class="display-3 fw-bold mb-3">{{ id.user.first_name }} {{ id.user.last_name }}</h1>
+        <p class="lead mb-5">{{ id.position.name }}</p>
+{% if id.bild.name != "" %}
+        <p class="lead mb-5"><img src="{{ id.bild.url  }}"></p>
+{% endif %}
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+
+{% for acl in acls %}
+          <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}</button>
+{% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</header>
+
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'hero-1.css'  %}" />
+<header id="header">
+
+<!-- Hero 1 - HCF Bootstrap 5 Component -->
+<section class="px-5 py-6 py-xxl-10 hcf-bp-center hcf-bs-cover hcf-overlay hcf-transform" style="background-image: url('{% static 'hero-main.jpg' %}');">
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
+        <h1 class="display-3 fw-bold mb-3">ID Karte NEU</h1>
+        <p class="lead mb-5"><a href="/admin/ids/identifikation/{{ id.slug }}/change/">Neue ID anlegen!</a></p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</header>
+
+{% endblock %}
+
