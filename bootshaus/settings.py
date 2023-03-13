@@ -20,10 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 USE_SPACES = os.getenv("DJANGO_USE_SPACES", "False") == "True"
 if USE_SPACES is True:
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = 'bootshaus-id-storage'
-    AWS_DEFAULT_ACL = None
+    AWS_S3_ENDPOINT_URL = 'https://ams3.digitaloceanspaces.com'
+    AWS_DEFAULT_ACL = 'public-read'
     DEFAULT_FILE_STORAGE = "bootshaus.storage.MediaStorage"
     STATICFILES_STORAGE = "bootshaus.storage.StaticStorage"
 else:
@@ -31,6 +32,8 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_URL = '/upload/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
