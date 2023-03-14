@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Identifikation, Position, ACLTyp, ACL
 from import_export.admin import ExportActionModelAdmin
+from django.utils.html import format_html
 
 class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
     def __init__(self, *args, **kwargs):
@@ -42,7 +43,7 @@ class IdentifikationAdmin(ExportActionModelAdmin):
     readonly_fields = ('slug','id_url')
 
     def id_url(self, obj):
-        return 'https://id.bootshaus.tv/%s' % (obj.slug)
+        return format_html('<a href="https://id.bootshaus.tv/{url}/" target="_blank">https://id.bootshaus.tv/{url}/</a>', url=obj.slug)
 
 admin.site.register(Position)
 admin.site.register(ACLTyp)

@@ -39,7 +39,7 @@ def id(request, slug):
         if 'acl_search' in request.session:
             acl_search = True
             # we have one to search, look for it
-            acl_ok = True if request.session['acl_search'] in acl_dict else False
+            acl_ok = True if request.session['acl_search'] in acl_dict or 'AAA' in acl_dict else False
 
         return render(request, 'id.html', {'id': id, 'acls': acl_dict, 'acl_search': acl_search, 'acl_ok': acl_ok})
 

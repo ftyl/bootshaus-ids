@@ -28,8 +28,10 @@
 {% for acl in acls %}
           <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}</button>
 {% endfor %}
-
         </div>
+{% if request.user.is_authenticated %}
+<p class="lead mb-5"><a href="/admin/ids/identifikation/{{ id.slug }}/change/">Zugriff modifizieren</a></p>
+{% endif %}
       </div>
     </div>
   </div>
