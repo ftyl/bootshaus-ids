@@ -34,7 +34,6 @@ else:
     MEDIA_URL = '/upload/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -62,6 +61,7 @@ INSTALLED_APPS = [
     'django_resized',
 
     'bootstrap5',
+    'import_export',
 ]
 
 MIDDLEWARE = [
