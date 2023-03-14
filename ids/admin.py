@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Identifikation, Position, ACLTyp, ACL
+from import_export.admin import ExportActionModelAdmin
 
 class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
     def __init__(self, *args, **kwargs):
@@ -12,10 +13,10 @@ class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
 
 class ACLInline(admin.TabularInline):
     model = ACL
-    extra = 1
+    extra = 0
 
 @admin.register(Identifikation)
-class IdentifikationAdmin(admin.ModelAdmin):
+class IdentifikationAdmin(ExportActionModelAdmin):
     def sortable_str(self, obj):
         return obj.__str__()
 
