@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from datetime import date
-from .models import Identifikation
+from .models import Identifikation, ACLTyp
 from django.contrib.auth import authenticate, login
 from django.http import HttpRequest, Http404
 
@@ -36,10 +36,10 @@ def id(request, slug):
         # do we have an acl we are looking for?
         acl_search = False
         acl_ok = False
-        if 'acl_search' in request.session:
+        if 'acl_search' in request.session and request.session['acl_search'] != '':
             acl_search = True
             # we have one to search, look for it
             acl_ok = True if request.session['acl_search'] in acl_dict or 'AAA' in acl_dict else False
 
-        return render(request, 'id.html', {'id': id, 'acls': acl_dict, 'acl_search': acl_search, 'acl_ok': acl_ok})
+        return render(request, 'id.html', {'id': id, 'acls': acl_dict, 'acl_search': acl_search, 'acl_ok': acl_ok, 'acltypes': ACLTyp.objects.all()})
 

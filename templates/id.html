@@ -3,11 +3,7 @@
 {% load bootstrap5 %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'hero-1.css'  %}" />
-<header id="header" style="height: 100vh;">
 
-<!-- Hero 1 - HCF Bootstrap 5 Component -->
-<section class="px-5 py-6 hcf-bp-center hcf-bs-cover hcf-overlay" style="height: 100%; background-image: url('{% static 'hero-main.jpg' %}');">
   <div class="container">
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
@@ -19,9 +15,9 @@
 {% endif %}
 {% endif %}
         <h1 class="display-3 fw-bold mb-3">{{ id.user.first_name }} {{ id.user.last_name }}</h1>
-        <p class="lead mb-5">{{ id.position.name }}</p>
+        <p>{{ id.position.name }}</p>
 {% if id.bild.name != "" %}
-        <p class="lead mb-5"><img src="{{ id.bild.url  }}"></p>
+        <p><img src="{{ id.bild.url  }}"></p>
 {% endif %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 
@@ -30,13 +26,11 @@
 {% endfor %}
         </div>
 {% if request.user.is_authenticated %}
-<p class="lead mb-5"><a href="/admin/ids/identifikation/{{ id.slug }}/change/">Zugriff modifizieren</a></p>
+<p class="lead mb-5"><a class="text-light" href="/admin/ids/identifikation/{{ id.slug }}/change/">Zugriff modifizieren</a></p>
 {% endif %}
       </div>
     </div>
   </div>
-</section>
-</header>
 
 {% endblock %}
 
