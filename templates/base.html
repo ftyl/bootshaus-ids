@@ -13,7 +13,8 @@
     {% bootstrap_messages %}
     <title>Bootshaus IDs</title>
 </head>
-<body class="bg-dark">
+<body class="bg-{% if acl_search and acl_ok %}success{% elif acl_search and not acl_ok %}danger{% else %}dark{% endif %}">
+
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="bootshaus" viewBox="0 0 246.6 161.6">
@@ -52,16 +53,15 @@
 
   <header class="p-3 text-bg-dark">
     <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="http://bootshaus.tv/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-start">
+        <a href="http://bootshaus.tv/" class="d-flex justify-content-start align-items-center mb-2 text-white text-decoration-none">
           <svg class="bi me-2" width="60" height="40" role="img" aria-label="Bootshaus"><use xlink:href="#bootshaus"/></svg>
         </a>
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        </ul>
+        <div class="flex-grow-1"></div>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="ACL">
-<select onchange="this.form.submit()" class="form-control form-control-dark text-bg-dark" name="acl_search">
+        <form class="d-flex align-items-center mb-2 me-3" role="ACL">
+<select onchange="this.form.submit()" class="form-select form-control-dark text-bg-dark" name="acl_search">
 <option value="">Matching Off</option>
 {% for acltyp in acltypes %}
 <option 
@@ -70,10 +70,6 @@ value="{{ acltyp.name }}">Look for: {{ acltyp.name }}</option>
 {% endfor %}
 </select>          
         </form>
-
-        <div class="text-end">
-          <a href="/admin/" role="button" class="btn btn-outline-light me-2">Login</a>
-        </div>
       </div>
     </div>
   </header>
