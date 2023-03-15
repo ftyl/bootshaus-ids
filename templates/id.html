@@ -9,7 +9,8 @@
       <div class="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
 {% if acl_search %}
 {% if acl_ok %}
-<div class="alert alert-success" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong> bestätigt! {% if id.plus > 0 %}<strong>+{{ id.plus }}</strong>{% endif %}</div>
+<div class="alert alert-success" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong> bestätigt!
+  {% if acl_search_plus > 0 %}<strong>+{{ acl_search_plus }}</strong>{% endif %}</div>
 {% else %}
 <div class="alert alert-danger" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong>  nicht gefunden!</div>
 {% endif %}
@@ -21,12 +22,9 @@
 {% endif %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 
-{% for acl in acls %}
-          <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}</button>
+{% for acl, plus in acls.items %}
+          <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}{% if plus > 0 %} +{{ plus }}{% endif %}</button>
 {% endfor %}
-{% if id.plus > 0 %}
-          <button type="button" class="btn btn-light btn-lg px-4 gap-3">+{{ id.plus }}</button>
-{% endif %}
         </div>
 {% if request.user.is_authenticated %}
 <p class="lead mt-5"><a target="_blank" class="link-light" href="/admin/ids/identifikation/{{ id.slug }}/change/">Zugriff modifizieren</a></p>

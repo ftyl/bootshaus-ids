@@ -27,13 +27,13 @@ class IdentifikationAdmin(ExportActionModelAdmin):
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
     search_fields = ('slug',)
-    list_display = ('sortable_str', 'position', 'aaa', 'plus', )
+    list_display = ('sortable_str', 'position', 'aaa', )
     inlines = [
         ACLInline,
     ]
     fieldsets = (
         (None, {
-            'fields': ('user', 'position', 'bild', 'aaa', 'plus')
+            'fields': ('user', 'position', 'bild', 'aaa')
         }),
         ('Slug Info', {
             'classes': ('collapse',),
