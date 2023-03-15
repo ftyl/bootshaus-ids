@@ -21,19 +21,19 @@ class IdentifikationAdmin(ExportActionModelAdmin):
     def sortable_str(self, obj):
         return obj.__str__()
 
-    sortable_str.short_description = 'ID Karte Eigentümer'
+    sortable_str.short_description = 'ID Karten Halter'
     sortable_str.admin_order_field = 'user__last_name'
 
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
     search_fields = ('slug',)
-    list_display = ('sortable_str', 'position', )
+    list_display = ('sortable_str', 'position', 'aaa', 'plus', )
     inlines = [
         ACLInline,
     ]
     fieldsets = (
         (None, {
-            'fields': ('user', 'position', 'bild')
+            'fields': ('user', 'position', 'bild', 'aaa', 'plus')
         }),
         ('Slug Info', {
             'classes': ('collapse',),

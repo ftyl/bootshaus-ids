@@ -37,8 +37,17 @@ class Identifikation(models.Model):
         letters = string.ascii_letters + string.digits
         return ''.join(random.choice(letters) for i in range(50))
 
+    PLUS_CHOICES = [
+        (0, "Keine Erlaubnis"),
+        (1, "Eine Extra Person"),
+        (3, "Drei Extra Personen"),
+        (99, "Unendlich!!"),
+    ]
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(primary_key=True, default=getRandomString)
+    aaa = models.BooleanField(default=False, help_text="ID matched positiv bei allen Rechten!", verbose_name="Access All Areas")
+    plus = models.IntegerField(default=0, choices=PLUS_CHOICES, help_text="Angeben ob der Halter dieser Karte weitere Personen mitnehmen kann", verbose_name="Personen mitnehmen")
     position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.PROTECT, verbose_name="Position")
     bild = ResizedImageField(size=[300,400], crop=['middle', 'center'], keep_meta=False, upload_to="photos/", verbose_name="ID-Bild", blank=True, null=True)
 

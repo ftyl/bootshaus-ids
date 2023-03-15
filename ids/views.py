@@ -28,7 +28,7 @@ def id(request, slug):
         # get currently valid ACLs
         valid_acls = id.acl_set.filter(beginn__lte=date.today(), ende__gte=date.today())
 
-        acl_dict = []
+        acl_dict = [] if not id.aaa else ['AAA']
         for acls in valid_acls:
             for acl in acls.type.all():
                 acl_dict += [acl.name]

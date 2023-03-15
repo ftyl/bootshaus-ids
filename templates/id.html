@@ -9,13 +9,13 @@
       <div class="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
 {% if acl_search %}
 {% if acl_ok %}
-<div class="alert alert-success" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong> bestätigt!!</div>
+<div class="alert alert-success" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong> bestätigt! {% if id.plus > 0 %}<strong>+{{ id.plus }}</strong>{% endif %}</div>
 {% else %}
 <div class="alert alert-danger" role="alert">Berechtigung <strong>{{ request.session.acl_search }}</strong>  nicht gefunden!</div>
 {% endif %}
 {% endif %}
-        <h1 class="display-3 fw-bold mb-3">{{ id.user.first_name }} {{ id.user.last_name }}</h1>
-        <p>{{ id.position.name }}</p>
+        <h1 class="display-3 fw-bold mb-1">{{ id.user.first_name }} {{ id.user.last_name }}</h1>
+        <p class="mb-3">{{ id.position.name }}</p>
 {% if id.bild.name != "" %}
         <p><img src="{{ id.bild.url  }}"></p>
 {% endif %}
@@ -24,6 +24,9 @@
 {% for acl in acls %}
           <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}</button>
 {% endfor %}
+{% if id.plus > 0 %}
+          <button type="button" class="btn btn-light btn-lg px-4 gap-3">+{{ id.plus }}</button>
+{% endif %}
         </div>
 {% if request.user.is_authenticated %}
 <p class="lead mt-5"><a target="_blank" class="link-light" href="/admin/ids/identifikation/{{ id.slug }}/change/">Zugriff modifizieren</a></p>
