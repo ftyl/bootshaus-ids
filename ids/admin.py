@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Identifikation, Position, ACLTyp, ACL
+from .models import Identifikation, Position, ACLTyp, ACL, IDLog
 from import_export.admin import ExportActionModelAdmin
 from django.utils.html import format_html
+from django_admin_relation_links import AdminChangeLinksMixin
+
 
 class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
     def __init__(self, *args, **kwargs):
@@ -17,7 +19,7 @@ class ACLInline(admin.TabularInline):
     extra = 0
 
 @admin.register(Identifikation)
-class IdentifikationAdmin(ExportActionModelAdmin):
+class IdentifikationAdmin(AdminChangeLinksMixin, ExportActionModelAdmin):
     def sortable_str(self, obj):
         return obj.__str__()
 
@@ -26,24 +28,42 @@ class IdentifikationAdmin(ExportActionModelAdmin):
 
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
-    search_fields = ('slug',)
-    list_display = ('sortable_str', 'position', 'aaa', )
+    search_fields = ('slug', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
+    list_display = ('sortable_str', 'user_link', 'position', 'aaa', )
     inlines = [
         ACLInline,
     ]
     fieldsets = (
         (None, {
-            'fields': ('user', 'position', 'bild', 'aaa')
+            'fields': ('user', 'position', 'bild', 'aaa', 'id_logs')
         }),
         ('Slug Info', {
             'classes': ('collapse',),
             'fields': ('slug', 'id_url')
         }),
     )
-    readonly_fields = ('slug','id_url')
+    readonly_fields = ('slug','id_url','id_logs')
+
+    change_links = ['user']
+
+    def id_logs(self, obj):
+        return format_html('<a href="/admin/ids/idlog/?identifikation__slug={id}">{c} Entries</a>', id=obj.slug, c=obj.idlogs.count())
+
 
     def id_url(self, obj):
         return format_html('<a href="https://id.bootshaus.tv/{url}/" target="_blank">https://id.bootshaus.tv/{url}/</a>', url=obj.slug)
+
+@admin.register(IDLog)
+class IDLogAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
+    def sortable_str(self, obj):
+        return  obj.identifikation.__str__()
+
+    sortable_str.short_description = "ID Karte"
+    sortable_str.admin_order_field = "logged_at"
+
+    list_display = ['sortable_str', "logged_at", "match_success", "matched_type", "matched_acl"]
+
+    readonly_fields = ('identifikation', 'logged_at', 'matched_type', 'matched_acl')
 
 admin.site.register(Position)
 admin.site.register(ACLTyp)

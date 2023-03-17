@@ -50,7 +50,6 @@ class Identifikation(models.Model):
     def __str__(self):
         return "%s, %s (%s)" % (self.user.last_name, self.user.first_name, self.user.username) if self.user != None else self.slug
 
-
 class ACL(models.Model):
 
     PLUS_CHOICES = [
@@ -68,5 +67,22 @@ class ACL(models.Model):
     ende = models.DateField(null=True, default=date(2070, 12, 31), verbose_name="Ende")
 
     def __str__(self):
-        return "%s (%s bis %s)" % (self.identifikation.__str__(), self.beginn.strftime("%d.%m.%Y"), self.ende.strftime("%d.%m.%Y"))
+        if self.description != '':
+            return "%s - %s (%s bis %s)" % (self.description, self.identifikation.__str__(), self.beginn.strftime("%d.%m.%Y"), self.ende.strftime("%d.%m.%Y"))
+        else:
+            return "%s (%s bis %s)" % (self.identifikation.__str__(), self.beginn.strftime("%d.%m.%Y"), self.ende.strftime("%d.%m.%Y"))
+
+class IDLog(models.Model):
+    identifikation = models.ForeignKey(Identifikation, verbose_name="ID Karte", related_name="idlogs", on_delete=models.PROTECT)
+    logged_at = models.DateTimeField(auto_now_add=True)
+    matched_type = models.ForeignKey(ACLTyp, verbose_name="Matched Typ", blank=True, null=True, on_delete=models.PROTECT)
+    matched_acl = models.ForeignKey(ACL, verbose_name="Matched ACL", blank=True, null=True, on_delete=models.PROTECT)
+    match_success = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "ID Log"
+        verbose_name_plural = "ID Logs"
+
+    def __str__(self):
+        return self.identifikation.__str__()
 

@@ -22,8 +22,8 @@
 {% endif %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 
-{% for acl, plus in acls.items %}
-          <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}{% if plus > 0 %} +{{ plus }}{% endif %}</button>
+{% for acl, aclinfo in acls.items %}
+          <button type="button" class="btn btn-light btn-lg px-4 gap-3">{{ acl }}{% if aclinfo.plus > 0 %} +{{ aclinfo.plus }}{% endif %}</button>
 {% endfor %}
         </div>
 {% if request.user.is_authenticated %}
