@@ -14,12 +14,17 @@ def id(request, slug):
     try:
         id = Identifikation.objects.get(slug=slug)
     except Identifikation.DoesNotExist:
-        raise Http404("No such ID found")
+        # is this slug ok length?
+        if len(slug) != 50:
+            raise Http404("No such ID found (len)")
+        if request.user.is_authenticated and request.user.has_perm('ids.add_identifikation'):
+            return render(request, 'id_create.html', {'slug': slug, 'acltypes': ACLTyp.objects.all()})
+        raise Http404("No such ID found (no admin, no such slug)")
 
-    if (id.user == None):
+    if id.active == False or id.user == None:
         if request.user.is_authenticated and request.user.has_perm('ids.add_identifikation'):
             return render(request, 'id_activate.html', {'id': id, 'acltypes': ACLTyp.objects.all()})
-        raise Http404("No such ID found")
+        raise Http404("No such ID found (no admin, empty user)")
     else:
         # store searching in session
         if 'acl_search' in request.GET:

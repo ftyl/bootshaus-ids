@@ -40,6 +40,7 @@ class Identifikation(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(primary_key=True, default=getRandomString)
     aaa = models.BooleanField(default=False, help_text="ID matched positiv bei allen Rechten!", verbose_name="Access All Areas")
+    active = models.BooleanField(default=True, help_text="ID Karten die verloren gehen hier deaktivieren", verbose_name="Aktiv")
     position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.PROTECT, verbose_name="Position")
     bild = ResizedImageField(size=[300,400], crop=['middle', 'center'], keep_meta=False, upload_to="photos/", verbose_name="ID-Bild", blank=True, null=True)
 
@@ -48,6 +49,8 @@ class Identifikation(models.Model):
         verbose_name_plural = "ID Karten"
 
     def __str__(self):
+        if self.active is False:
+            return "Inaktiv - (%s)" % (self.user.username) if self.user != None else "Inaktiv - (%s)" % (self.slug)
         return "%s, %s (%s)" % (self.user.last_name, self.user.first_name, self.user.username) if self.user != None else self.slug
 
 class ACL(models.Model):

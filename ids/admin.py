@@ -29,20 +29,25 @@ class IdentifikationAdmin(AdminChangeLinksMixin, ExportActionModelAdmin):
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
     search_fields = ('slug', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
-    list_display = ('sortable_str', 'user_link', 'position', 'aaa', )
+    list_display = ('sortable_str', 'active', 'user_link', 'position', 'aaa', )
     inlines = [
         ACLInline,
     ]
     fieldsets = (
         (None, {
-            'fields': ('user', 'position', 'bild', 'aaa', 'id_logs')
+            'fields': ('user', 'position', 'bild', 'aaa', 'active', 'id_logs')
         }),
         ('Slug Info', {
             'classes': ('collapse',),
             'fields': ('slug', 'id_url')
         }),
     )
-    readonly_fields = ('slug','id_url','id_logs')
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return ('slug','id_url','id_logs')
+        else:
+            return ('id_url','id_logs')
 
     change_links = ['user']
 
@@ -63,7 +68,7 @@ class IDLogAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
 
     list_display = ['sortable_str', "logged_at", "match_success", "matched_type", "matched_acl"]
 
-    readonly_fields = ('identifikation', 'logged_at', 'matched_type', 'matched_acl')
+    readonly_fields = ('identifikation', 'logged_at', 'match_success', 'matched_type', 'matched_acl')
 
 admin.site.register(Position)
 admin.site.register(ACLTyp)
