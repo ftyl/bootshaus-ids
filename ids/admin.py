@@ -20,6 +20,12 @@ class ACLInline(admin.TabularInline):
 
 @admin.register(Identifikation)
 class IdentifikationAdmin(AdminChangeLinksMixin, ExportActionModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        field = super(IdentifikationAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "user":
+            field.label_from_instance = lambda u: "%s %s (%s)" % (u.first_name, u.last_name, u.username)
+        return field
+
     def sortable_str(self, obj):
         return obj.__str__()
 
@@ -28,7 +34,7 @@ class IdentifikationAdmin(AdminChangeLinksMixin, ExportActionModelAdmin):
 
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
-    search_fields = ('slug', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
+    search_fields = ('slug', 'position__name', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
     list_display = ('sortable_str', 'active', 'user_link', 'position', 'aaa', )
     inlines = [
         ACLInline,

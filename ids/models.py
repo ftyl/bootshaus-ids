@@ -25,8 +25,8 @@ class ACLTyp(models.Model):
     beschreibung = models.CharField(blank=True, max_length=256, verbose_name="Beschreibung")
 
     class Meta:
-        verbose_name = "ACL Typ"
-        verbose_name_plural = "ACL Typen"
+        verbose_name = "Rechte-Typ"
+        verbose_name_plural = "Rechte-Typen"
         ordering = ['name']
 
     def __str__(self):
@@ -39,7 +39,7 @@ class Identifikation(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(primary_key=True, default=getRandomString)
-    aaa = models.BooleanField(default=False, help_text="ID matched positiv bei allen Rechten!", verbose_name="Access All Areas")
+    aaa = models.BooleanField(default=False, help_text="ID matched positiv bei allen Rechte-Typen!", verbose_name="Access All Areas")
     active = models.BooleanField(default=True, help_text="ID Karten die verloren gehen hier deaktivieren", verbose_name="Aktiv")
     position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.PROTECT, verbose_name="Position")
     bild = ResizedImageField(size=[300,400], crop=['middle', 'center'], keep_meta=False, upload_to="photos/", verbose_name="ID-Bild", blank=True, null=True)
@@ -63,11 +63,15 @@ class ACL(models.Model):
     ]
 
     description = models.CharField(blank=True, max_length=256, verbose_name="Beschreibung")
-    type = models.ManyToManyField(ACLTyp, verbose_name="Typ", blank=True)
+    type = models.ManyToManyField(ACLTyp, verbose_name="Rechte-Typ", blank=True)
     identifikation = models.ForeignKey(Identifikation, verbose_name="ID Karte", on_delete=models.CASCADE)
     plus = models.IntegerField(default=0, choices=PLUS_CHOICES, help_text="Angeben ob der Halter dieser Karte weitere Personen mitnehmen kann", verbose_name="Personen mitnehmen")
     beginn = models.DateField(null=True, default=timezone.now, verbose_name="Beginn")
     ende = models.DateField(null=True, default=date(2070, 12, 31), verbose_name="Ende")
+
+    class Meta:
+        verbose_name = "Berechtigung"
+        verbose_name_plural = "Berechtigungen"
 
     def __str__(self):
         if self.description != '':
@@ -78,8 +82,8 @@ class ACL(models.Model):
 class IDLog(models.Model):
     identifikation = models.ForeignKey(Identifikation, verbose_name="ID Karte", related_name="idlogs", on_delete=models.PROTECT)
     logged_at = models.DateTimeField(auto_now_add=True)
-    matched_type = models.ForeignKey(ACLTyp, verbose_name="Matched Typ", blank=True, null=True, on_delete=models.PROTECT)
-    matched_acl = models.ForeignKey(ACL, verbose_name="Matched ACL", blank=True, null=True, on_delete=models.PROTECT)
+    matched_type = models.ForeignKey(ACLTyp, verbose_name="Rechte-Typ", blank=True, null=True, on_delete=models.PROTECT)
+    matched_acl = models.ForeignKey(ACL, verbose_name="Berechtigung", blank=True, null=True, on_delete=models.PROTECT)
     match_success = models.BooleanField(default=False)
 
     class Meta:
