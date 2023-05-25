@@ -4,6 +4,7 @@ from import_export.admin import ExportActionModelAdmin
 from django.utils.html import format_html
 from django_admin_relation_links import AdminChangeLinksMixin
 
+admin.site.site_header = "Bootshaus ID Admin"
 
 class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
     def __init__(self, *args, **kwargs):
