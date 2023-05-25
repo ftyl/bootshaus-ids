@@ -1,10 +1,25 @@
 from django.contrib import admin
-from .models import Identifikation, Position, ACLTyp, ACL, IDLog
+from .models import Profile, Identifikation, Position, ACLTyp, ACL, IDLog
 from import_export.admin import ExportActionModelAdmin
 from django.utils.html import format_html
 from django_admin_relation_links import AdminChangeLinksMixin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
 admin.site.site_header = "Bootshaus ID Admin"
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name = "Profile"
+
+class MyUserAdmin(UserAdmin):
+    inlines = [ProfileInline]
+
+admin.site.unregister(User)
+admin.site.register(User, MyUserAdmin)
+
 
 class DefaultNotEmptyFieldListFilter(admin.EmptyFieldListFilter):
     def __init__(self, *args, **kwargs):
@@ -33,16 +48,22 @@ class IdentifikationAdmin(AdminChangeLinksMixin, ExportActionModelAdmin):
     sortable_str.short_description = 'ID Karten Halter'
     sortable_str.admin_order_field = 'user__last_name'
 
+    def user_profile_position(self, obj):
+        return obj.user.profile.position.__str__()
+
+    user_profile_position.short_description = 'Position'
+    user_profile_position.admin_order_field = 'user__profile__position__name'
+
     list_filter = (('user', DefaultNotEmptyFieldListFilter),)
 
-    search_fields = ('slug', 'position__name', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
-    list_display = ('sortable_str', 'active', 'user_link', 'position', 'aaa', )
+    search_fields = ('slug', 'user__profile__position__name', 'user__last_name', 'user__first_name', 'user__username', 'user__email',)
+    list_display = ('sortable_str', 'user_profile_position', 'active', 'user_link', 'aaa', )
     inlines = [
         ACLInline,
     ]
     fieldsets = (
         (None, {
-            'fields': ('user', 'position', 'bild', 'aaa', 'active', 'id_logs')
+            'fields': ('user', 'aaa', 'active', 'id_logs')
         }),
         ('Slug Info', {
             'classes': ('collapse',),

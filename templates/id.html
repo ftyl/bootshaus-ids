@@ -16,9 +16,9 @@
 {% endif %}
 {% endif %}
         <h1 class="display-3 fw-bold mb-1">{{ id.user.first_name }} {{ id.user.last_name }}</h1>
-        <p class="mb-3">{{ id.position.name }}</p>
-{% if id.bild.name != "" %}
-        <p><img src="{{ id.bild.url  }}"></p>
+        <p class="mb-3">{{ id.user.profile.position.name }}</p>
+{% if id.user.profile.bild.name != "" %}
+        <p><img src="{{ id.user.profile.bild.url  }}"></p>
 {% endif %}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 

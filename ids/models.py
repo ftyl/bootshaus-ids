@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone 
 from datetime import date
 from django_resized import ResizedImageField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 import random
 import string
 
@@ -19,6 +21,22 @@ class Position(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.PROTECT, verbose_name="Position")
+    bild = ResizedImageField(size=[300,400], crop=['middle', 'center'], keep_meta=False, upload_to="photos/", verbose_name="ID-Bild", blank=True, null=True)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 class ACLTyp(models.Model):
     name = models.CharField(max_length=32, verbose_name="Name")
@@ -41,8 +59,6 @@ class Identifikation(models.Model):
     slug = models.SlugField(primary_key=True, default=getRandomString)
     aaa = models.BooleanField(default=False, help_text="ID matched positiv bei allen Rechte-Typen!", verbose_name="Access All Areas")
     active = models.BooleanField(default=True, help_text="ID Karten die verloren gehen hier deaktivieren", verbose_name="Aktiv")
-    position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.PROTECT, verbose_name="Position")
-    bild = ResizedImageField(size=[300,400], crop=['middle', 'center'], keep_meta=False, upload_to="photos/", verbose_name="ID-Bild", blank=True, null=True)
 
     class Meta:
         verbose_name = "ID Karte"
